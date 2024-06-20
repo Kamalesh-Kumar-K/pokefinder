@@ -70,7 +70,7 @@ const Pokedata = () => {
       <div className="row justify-content-center" style={{ marginTop: "50px" }}>
         {loading ? ( // Show a loading message while data is being fetched
           <div className="text-center fs-1 text-primary">
-            <p>Loading...</p>
+            <p>Loading... /t please wait</p>
           </div>
         ) : filteredPoke.length > 0 ? (
           filteredPoke.map((pokemon, index) => (
