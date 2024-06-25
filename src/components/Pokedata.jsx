@@ -81,7 +81,7 @@ const Pokedata = () => {
       
         {loading ? ( // Show a loading message while data is being fetched
           <div className="text-center fs-1 text-primary">
-            <p>Loading...</p>
+            <p> loading...</p>
           </div>
         ) : currentPosts.length > 0 ? (
           currentPosts.map((pokemon, index) => (
