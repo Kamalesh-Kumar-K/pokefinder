@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
+import Pagination from "./Pagination";
 
 const Pokedata = () => {
   const [poke, setPoke] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPoke, setFilteredPoke] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(4);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,6 +47,13 @@ const Pokedata = () => {
       setSearchTerm(e.target.value);
     }
   };
+  
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+  const lastPostIndex = currentPage*postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = filteredPoke.slice(firstPostIndex, lastPostIndex);
 
   return (
     <div className="container">
@@ -51,7 +61,7 @@ const Pokedata = () => {
         className="fixed-top"
         style={{ padding: "10px", display: "flex", justifyContent: "center" }}
       >
-        <div className="input-group" style={{ maxWidth: "300px" }}>
+        <div className="input-group" style={{ width:'40%'}}>
           <input
             type="text"
             value={searchTerm}
@@ -68,25 +78,31 @@ const Pokedata = () => {
         </div>
       </div>
       <div className="row justify-content-center" style={{ marginTop: "50px" }}>
+      
         {loading ? ( // Show a loading message while data is being fetched
           <div className="text-center fs-1 text-primary">
             <p>Loading...</p>
           </div>
-        ) : filteredPoke.length > 0 ? (
-          filteredPoke.map((pokemon, index) => (
+        ) : currentPosts.length > 0 ? (
+          currentPosts.map((pokemon, index) => (
             <Card
               id={pokemon.id}
               name={pokemon.name}
               exp={pokemon.base_experience}
-              height ={pokemon.height}
-              weight = {pokemon.weight}
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
-            />
+              height={pokemon.height}
+              weight={pokemon.weight}
+              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`} />
+              
+              
+        
           ))
         ) : (
           <div className="text-center fs-1 text-danger">
             <p>No Pokémon found</p>
           </div>
+        )}
+        {currentPosts.length > 0 && (
+          <Pagination totalPosts={filteredPoke.length} postsPerPage={postsPerPage} onChangePage={handlePageChange} />
         )}
       </div>
     </div>
